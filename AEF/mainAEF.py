@@ -1,3 +1,4 @@
+from adjustText import adjust_text
 from sklearn.decomposition import PCA
 import numpy as np
 import pandas as pd
@@ -97,3 +98,27 @@ plt.title('Corelograma scorurilor', fontsize=40,
           color='k', verticalalignment='bottom')
 sb.heatmap(data=scores_df, cmap='bwr', vmin=-1, vmax=1, annot=True)
 plt.savefig(PATH_FOR_PLOTS / 'corelograma_scorurilor.png')
+
+# Realizare cerc al corelațiilor pentru spațiul factorilor
+plt.figure(figsize=(22, 22))
+plt.title('Cercul corelațiilor', fontsize=20,
+          color='k', verticalalignment='bottom')
+T = [t for t in np.arange(0, np.pi * 2, 0.01)]
+X = [np.cos(t) for t in T]
+Y = [np.sin(t) for t in T]
+plt.plot(X, Y)
+plt.axhline(y=0, color='g')
+plt.axvline(x=0, color='g')
+plt.xlabel(factor_loadings_df.columns[0],
+           fontsize=16, color='b', verticalalignment='top')
+plt.ylabel(factor_loadings_df.columns[1], fontsize=16,
+           color='b', verticalalignment='bottom')
+plt.scatter(factor_loadings_df.iloc[:, 0],
+            factor_loadings_df.iloc[:, 1], c='r', vmin=-1, vmax=1)
+texts = []
+for i in range(factor_loadings_df.shape[0]):
+  t = plt.text(factor_loadings_df.iloc[i, 0],
+               factor_loadings_df.iloc[i, 1], factor_loadings_df.index[i], fontsize=10)
+  texts.append(t)
+adjust_text(texts)
+plt.savefig(PATH_FOR_PLOTS / 'cercul_corelațiilor.png')
